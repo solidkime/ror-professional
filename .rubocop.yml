@@ -1,0 +1,24 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  # Include gemspec and Rakefile
+  Include:
+    - 'app/**/*.rb'
+    - 'config/**/*.rb'
+    - 'lib/**/*.rb'
+    - 'lib/**/*.rake'
+  Exclude:
+    - 'vendor/**/*'
+    - 'db/**/*.rb'
+    - 'bin/**/*'
+    - 'spec/**/*.rb'
+    - 'lib/**/*.rake'
+  DisplayCopNames: true
+
+Style/Documentation:
+  Description: 'Document classes and non-namespace modules.'
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 130
+

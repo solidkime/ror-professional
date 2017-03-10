@@ -1,5 +1,6 @@
 inherit_from: .rubocop_todo.yml
 
+# Что еще стоило бы добавить?
 AllCops:
   # Include gemspec and Rakefile
   Include:
@@ -15,8 +16,17 @@ AllCops:
     - 'lib/**/*.rake'
   DisplayCopNames: true
 
+  
+Metrics/LineLength:
+  Max: 100
+
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/MethodLength:
+  Max: 15
+
 Style/Documentation:
-  Description: 'Document classes and non-namespace modules.'
   Enabled: false
 
 Metrics/LineLength:

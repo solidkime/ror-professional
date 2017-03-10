@@ -16,9 +16,17 @@ AllCops:
     - 'lib/**/*.rake'
   DisplayCopNames: true
 
-# Стоит ли оставить это исключение?
+  
+Metrics/LineLength:
+  Max: 100
+
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/MethodLength:
+  Max: 15
+
 Style/Documentation:
-  Description: 'Document classes and non-namespace modules.'
   Enabled: false
 
 Metrics/LineLength:

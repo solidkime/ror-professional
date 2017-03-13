@@ -7,13 +7,11 @@ class AnswersController < ApplicationController
     @answers = Answer.all
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @answer = @question.answers.new
   end
-
 
   def create
     @answer = @question.answers.new(answer_params)

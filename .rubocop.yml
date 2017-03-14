@@ -16,6 +16,8 @@ AllCops:
     - 'lib/**/*.rake'
   DisplayCopNames: true
 
+Rails:
+  Enabled: true
   
 Metrics/LineLength:
   Max: 100

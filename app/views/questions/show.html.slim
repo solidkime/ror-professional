@@ -1,1 +1,27 @@
-<p>sss</p>
+
+h2#question_title
+  = @question.title
+= @question.body
+
+hr
+- @question.answers.each do |answer|
+  li#answer_body
+    = answer.body
+  br
+- if user_signed_in?
+  = form_for([@question, @question.answers.build]) do |f|
+    = render 'common/errors', resource: @answer if @answer
+    .field
+      = f.label :body, 'Comment:'
+      br
+      br
+      = f.text_area :body
+    .actions
+      = f.submit
+  p= link_to "Destroy", question_path(@question), method: :delete
+- else
+  p You should log in to leave comments
+  p= link_to "Log in", new_user_session_path
+  p= link_to "Sign in", new_user_registration_path
+
+  

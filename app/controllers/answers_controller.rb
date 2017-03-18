@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+  # frozen_string_literal: true
 class AnswersController < ApplicationController
   before_action :load_answer, only: [:show, :new]
   before_action :load_question, only: [:new, :create]
@@ -16,9 +16,11 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.new(answer_params)
     if @answer.save
-      redirect_to question_answer_url(@question, @answer)
+      redirect_to @question, notice: 'Thank you for answer!'
+      # redirect_to question_answer_url(@question, @answer)
     else
-      render :new
+      @question.reload
+      render "questions/show"
     end
   end
 

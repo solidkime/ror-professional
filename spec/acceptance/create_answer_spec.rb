@@ -12,10 +12,11 @@ feature 'Create answer', %q{
     sign_in(user)
     visit question_path(question)
 
-    fill_in 'Comment', with: 'text text'
+    fill_in 'Comment', with: 'omg omg'
     click_on 'Create'
 
-    expect(page).to have_content "Thank you for answer!" 
+    expect(page).to have_content "Thank you for answer!"
+    expect(page).to have_content "omg omg" 
   end
 
   scenario 'Non-authenticated user is trying to create answer' do

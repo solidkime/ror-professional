@@ -10,8 +10,10 @@ table#items
     tr
       td
         div 
-          = question.title + " "
-          =link_to "show", question_path(question)
+          p= "Title - #{ question.title }"
+          p= "Question: #{question.body}"
+          p= link_to "show", question_path(question)
+          hr
 
       
 

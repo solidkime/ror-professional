@@ -18,17 +18,15 @@ class AnswersController < ApplicationController
     @answer.user = current_user
     if @answer.save
       redirect_to @question, notice: 'Thank you for answer!'
-      # redirect_to question_answer_url(@question, @answer)
     else
-      @question.reload
       render "questions/show"
     end
   end
 
   def destroy
-    if @answer.user.id == current_user.id
+    if @answer.user_id == current_user.id
       @answer.destroy
-      redirect_to questions_path, notice: 'Answer was succesfully deleted!'
+      redirect_to question_path(@question), notice: 'Answer was succesfully deleted!'
     else
       flash.now[:alert] = 'Sorry, you can delete only your answers.'
       render 'questions/show'

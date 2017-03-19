@@ -6,7 +6,9 @@ h2#question_title
 hr
 - @question.answers.each do |answer|
   li#answer_body
-    = answer.body
+    #p= answer.body
+    -if user_signed_in?
+      #p= link_to "Destroy answer", question_answer_path(@question, answer), method: :delete
   br
 - if user_signed_in?
   = form_for([@question, @question.answers.build]) do |f|

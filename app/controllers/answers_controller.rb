@@ -1,7 +1,7 @@
   # frozen_string_literal: true
 class AnswersController < ApplicationController
-  before_action :load_answer, only: [:show, :new]
-  before_action :load_question, only: [:new, :create]
+  before_action :load_answer, only: [:show, :new, :destroy]
+  before_action :load_question, only: [:new, :create, :destroy]
 
   def index
     @answers = Answer.all
@@ -15,12 +15,23 @@ class AnswersController < ApplicationController
 
   def create
     @answer = @question.answers.new(answer_params)
+    @answer.user = current_user
     if @answer.save
       redirect_to @question, notice: 'Thank you for answer!'
       # redirect_to question_answer_url(@question, @answer)
     else
       @question.reload
       render "questions/show"
+    end
+  end
+
+  def destroy
+    if @answer.user.id == current_user.id
+      @answer.destroy
+      redirect_to questions_path, notice: 'Answer was succesfully deleted!'
+    else
+      flash.now[:alert] = 'Sorry, you can delete only your answers.'
+      render 'questions/show'
     end
   end
 

@@ -36,7 +36,7 @@ class QuestionsController < ApplicationController
       @question.destroy
       redirect_to questions_path, notice: 'Question was succesfully deleted!'
     else
-      flash[:alert] = 'Sorry, you can delete only your questions.'
+      flash.now[:alert] = 'Sorry, you can delete only your questions.'
       render :show
   end
 end

@@ -3,7 +3,7 @@ require 'rails_helper'
 feature "View the question and it's answers" do
   given(:user) { create(:user) }
   given!(:question) { create(:question, user: user) }
-  given!(:answers) { create_list(:answer, 2, question: question) }
+  given!(:answers) { create_list(:answer, 2, question: question, user: user) }
 
   scenario 'Registered user can view question and answers' do
     sign_in(user)

@@ -1,13 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create :question }
-  let(:answer) { create :answer, question: question }
+  let(:user) { create(:user) }
+  let(:question) { create :question, user: user }
+  let(:answer) { create :answer, question: question, user: user }
+
 
   describe "GET #index" do
     sign_in_user
 
-    let(:answers) { create_list(:answer, 2, question: question) }
+    let(:answers) { create_list(:answer, 2, question: question, user: user) }
     before do
       get :index, params: { question_id: question }
     end

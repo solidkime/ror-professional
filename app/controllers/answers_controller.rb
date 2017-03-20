@@ -1,7 +1,7 @@
   # frozen_string_literal: true
 class AnswersController < ApplicationController
   before_action :load_answer, only: [:show, :new, :destroy]
-  before_action :load_question, only: [:new, :create, :destroy]
+  before_action :load_question, only: [:new, :create]
 
   def index
     @answers = Answer.all
@@ -14,8 +14,10 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.new(answer_params)
+    @answer = Answer.new(answer_params)
+    @answer.question = @question
     @answer.user = current_user
+
     if @answer.save
       redirect_to @question, notice: 'Thank you for answer!'
     else
@@ -24,6 +26,7 @@ class AnswersController < ApplicationController
   end
 
   def destroy
+    @question = @answer.question
     if @answer.user_id == current_user.id
       @answer.destroy
       redirect_to question_path(@question), notice: 'Answer was succesfully deleted!'

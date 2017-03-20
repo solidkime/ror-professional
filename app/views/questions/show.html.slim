@@ -5,11 +5,10 @@ h2#question_title
 
 hr
 - @question.answers.each do |answer|
-  -if !answer.new_record? 
-    li#answer_body
-      #p= answer.body
-      - if user_signed_in? 
-        #p= link_to "Destroy answer", question_answer_path(@question, answer), method: :delete
+  li#answer_body
+    #p= answer.body
+    - if user_signed_in? 
+      #p= link_to "Destroy answer", answer_path(answer), method: :delete
     br
 - if user_signed_in?
   = form_for([@question, @question.answers.build]) do |f|
@@ -26,5 +25,3 @@ hr
   p You should log in to leave comments
   p= link_to "Log in", new_user_session_path
   p= link_to "Sign in", new_user_registration_path
-
-  

@@ -117,9 +117,6 @@ RSpec.describe QuestionsController, type: :controller do
   end
   describe 'DELETE #destroy' do
     sign_in_user
-    # before do
-    #   question
-    # end
   
     it 'deletes question' do
       question = create(:question, user: @user)

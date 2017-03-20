@@ -1,19 +1,19 @@
 h1 List of questions
 
-table#items
+table.table
   thead
     tr
       th Title
-      th colspan="3"
+      th Body
+      th More
   tbody
-  - @questions.each do |question|
-    tr
-      td
-        div 
-          p= "Title - #{ question.title }"
-          p= "Question: #{question.body}"
-          p= link_to "show", question_path(question)
-          hr
+    - @questions.each do |question|
+      tr
+        td= "#{ question.title }"
+        td= "#{question.body}"
+        td= link_to "show", question_path(question)
+
+
 
       
 

@@ -9,16 +9,19 @@ feature "View the question and it's answers" do
     sign_in(user)
     visit question_path(question)
 
-    expect(page).to have_css("h2#question_title")
-    expect(page).to have_css("li#answer_body", count: 2)
+    expect(page).to have_content question.body
+    # expect(page).to have_css("li#answer_body", count: 2)
+    expect(page).to have_content answers[0].body
+    expect(page).to have_content answers[1].body
 
   end
 
   scenario 'Guest can view question' do
     visit question_path(question)
 
-    expect(page).to have_css("h2#question_title")
-    expect(page).to have_css("li#answer_body", count: 2)
+    expect(page).to have_content question.body
+    expect(page).to have_content answers[0].body
+    expect(page).to have_content answers[1].body
   end
 
 end

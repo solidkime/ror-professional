@@ -1,15 +1,19 @@
-
 h2#question_title
   = @question.title
 = @question.body
 
-hr
-- @question.answers.each do |answer|
-  li#answer_body
-    #p= answer.body
-    - if user_signed_in? 
-      #p= link_to "Destroy answer", answer_path(answer), method: :delete
-    br
+table.table
+  thead
+    tr
+      th Body
+  tbody
+    - @question.answers.each do |answer|
+      tr
+        td= "#{ answer.body }"
+        - if user_signed_in?
+            td= link_to "Destroy answer", answer_path(answer), method: :delete
+
+            
 - if user_signed_in?
   = form_for([@question, @question.answers.build]) do |f|
     = render 'common/errors', resource: @answer if @answer

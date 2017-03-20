@@ -15,7 +15,6 @@ feature 'User can destroy his or her answer', %q{
     sign_in(user)
 
     visit question_path(question)
-    
     click_on "Destroy answer"
     expect(page).to have_content 'Answer was succesfully deleted!'
     expect(page).not_to have_content answer.body

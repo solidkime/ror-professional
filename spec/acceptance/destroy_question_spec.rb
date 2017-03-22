@@ -14,6 +14,7 @@ feature 'User can destroy his or her question', %q{
     sign_in(user)
 
     visit question_path(question)
+    expect(page).to have_content question.body
     click_on "Destroy"
     expect(page).to have_content 'Question was succesfully deleted!'
     expect(page).not_to have_content question.body
@@ -22,10 +23,10 @@ feature 'User can destroy his or her question', %q{
   scenario 'User tries to delete not his question' do
     sign_in(user_2)
 
+    expect(page).to have_content question.body
     visit question_path(question)
-    click_on "Destroy"
-
-    expect(page).to have_content 'Sorry, you can delete only your questions.'
+    
+    expect(page).to_not have_link 'Destroy'
   end
 
   scenario 'Guest tries to delete question' do

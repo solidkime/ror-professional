@@ -9,8 +9,8 @@ table.table
   tbody
     - @question.answers.each do |answer|
       tr
-        td= "#{ answer.body }"
-        - if user_signed_in?
+        td=  answer.body
+        - if user_signed_in? && current_user.author_of?(answer)
             td= link_to "Destroy answer", answer_path(answer), method: :delete
 
             
@@ -24,8 +24,7 @@ table.table
       = f.text_area :body
     .actions
       = f.submit
-  p= link_to "Destroy", question_path(@question), method: :delete
+  -if current_user.author_of?(@question)
+    p= link_to "Destroy", question_path(@question), method: :delete
 - else
   p You should log in to leave comments
-  p= link_to "Log in", new_user_session_path
-  p= link_to "Sign in", new_user_registration_path

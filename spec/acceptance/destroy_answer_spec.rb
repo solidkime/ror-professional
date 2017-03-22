@@ -15,6 +15,7 @@ feature 'User can destroy his or her answer', %q{
     sign_in(user)
 
     visit question_path(question)
+    expect(page).to have_content answer.body
     click_on "Destroy answer"
     expect(page).to have_content 'Answer was succesfully deleted!'
     expect(page).not_to have_content answer.body
@@ -24,9 +25,10 @@ feature 'User can destroy his or her answer', %q{
     sign_in(user_2)
 
     visit question_path(question)
-    click_on "Destroy answer"
+    expect(page).to have_content answer.body
+    expect(page).to_not have_link 'Destroy answer'
 
-    expect(page).to have_content 'Sorry, you can delete only your answers.'
+    # expect(page).to have_content 'Sorry, you can delete only your answers.'
   end
 
   scenario 'Guest tries to delete answer' do

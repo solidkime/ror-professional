@@ -9,8 +9,8 @@ table.table
   tbody
     - @questions.each do |question|
       tr
-        td= "#{ question.title }"
-        td= "#{question.body}"
+        td=  question.title
+        td=  question.body
         td= link_to "show", question_path(question)
 
 
@@ -18,4 +18,3 @@ table.table
       
 
 p= link_to 'Ask question', new_question_path
-p= link_to "Log out", destroy_user_session_path, method: :delete

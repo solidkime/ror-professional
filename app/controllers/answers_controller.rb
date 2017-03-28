@@ -14,15 +14,17 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = Answer.new(answer_params)
-    @answer.question = @question
-    @answer.user = current_user
+    @answer = @question.answers.create(answer_params.merge(user: current_user))
+    # @answer = Answer.new(answer_params)
+    # @answer.question = @question
+    # @answer.user = current_user
+    # @answer.save
 
-    if @answer.save
-      redirect_to @question, notice: 'Thank you for answer!'
-    else
-      render "questions/show"
-    end
+    # if @answer.save
+    #  redirect_to @question, notice: 'Thank you for answer!'
+    # else
+    #   render "questions/show"
+    # end
   end
 
   def destroy

@@ -35,6 +35,9 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 gem 'slim-rails'
 gem 'devise'
+gem 'jquery-rails'
+
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -42,11 +45,13 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara'#, '~> 2.7.0'
   gem 'selenium-webdriver'
+  gem 'database_cleaner'
 
   # гемы из скринкаста
   gem 'factory_girl_rails'
   gem 'rspec-rails'
   gem 'rails-controller-testing'
+  gem "capybara-webkit"
 end
 
 group :development do

@@ -1,0 +1,9 @@
+= form_for @question do |f|
+  = render 'common/errors', resource: @question if @question
+  = f.label :title
+  = f.text_field :title
+  br
+  br
+  = f.label :body
+  = f.text_area :body
+  = f.submit 'Create'

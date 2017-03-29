@@ -30,6 +30,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not save the answer' do
         expect { post :create, params: { answer: attributes_for(:invalid_answer), question_id: question, user: user, format: :js } }.to_not change(Answer, :count)
       end
+
       it 'rerenders create template' do
         post :create, params: { answer: attributes_for(:invalid_answer), question_id: question, user: user, format: :js } 
         expect(response).to render_template :create

@@ -2,8 +2,9 @@ h2#question_title
   = @question.title
 = @question.body
 
-.answers
-  = render 'answers'
+ul.answers
+  - @question.answers.each do |answer|
+    = render 'answers/answer', answer: answer
 
             
 - if user_signed_in?

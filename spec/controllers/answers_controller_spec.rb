@@ -12,9 +12,12 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with valid attributes' do
       it 'saves the new answer in database' do
-        expect { post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js } }.to change(question.answers, :count).by(1)
-        post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js }
-        expect(answer).to have_attributes(user: user)
+        expect { post :create, params: { answer: attributes_for(:answer), question_id: question, user: user, format: :js } }.to change(question.answers, :count).by(1)
+      end
+
+      it 'creates association with current_user' do
+        expect { post :create, params: { answer: attributes_for(:answer), question_id: question, user: user, format: :js } }.to change(@user.answers, :count).by(1)
+        #expect(user.questions.count).to eq 0
       end
 
       it 'renders create template' do
@@ -25,10 +28,10 @@ RSpec.describe AnswersController, type: :controller do
     end
     context 'with invalid attributes' do
       it 'does not save the answer' do
-        expect { post :create, params: { answer: attributes_for(:invalid_answer), question_id: question, format: :js } }.to_not change(Answer, :count)
+        expect { post :create, params: { answer: attributes_for(:invalid_answer), question_id: question, user: user, format: :js } }.to_not change(Answer, :count)
       end
       it 'rerenders create template' do
-        post :create, params: { answer: attributes_for(:invalid_answer), question_id: question, format: :js } 
+        post :create, params: { answer: attributes_for(:invalid_answer), question_id: question, user: user, format: :js } 
         expect(response).to render_template :create
       end
     end

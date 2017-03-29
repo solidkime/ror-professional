@@ -1,6 +1,6 @@
   # frozen_string_literal: true
 class AnswersController < ApplicationController
-  before_action :load_answer, only: [:show, :new, :destroy]
+  before_action :load_answer, only: [:show, :destroy]
   before_action :load_question, only: [:new, :create]
 
   def index
@@ -10,7 +10,7 @@ class AnswersController < ApplicationController
   def show; end
 
   def new
-    @answer = @question.answers.new
+    #@answer = @question.answers.new
   end
 
   def create

@@ -15,7 +15,8 @@ feature 'Create answer', %q{
     fill_in 'Comment', with: 'omg omg'
     click_on 'Create'
 
-    expect(page).to have_content "omg omg" 
+    expect(page).to have_content "omg omg"
+    expect(page).to have_content "Thank you for answer!" 
   end
 
   scenario 'Authenticated user creates invalid answer', js: true do
@@ -27,6 +28,8 @@ feature 'Create answer', %q{
 
     expect(page).to have_content "Errors"
     expect(page).to have_content "Body can't be blank"
+    expect(page).to have_content "Thank you for answer!"
+    expect(page).to have_content "Answer is wrong"
   end
 
   scenario 'Non-authenticated user is trying to create answer' do

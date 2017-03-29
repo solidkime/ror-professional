@@ -1,3 +1,4 @@
+$(".notice").html('<%= j flash[:notice] %>');
 $(".answers").append('<%= j render 'answers/answer', answer: @answer %>');
 // $('.answers').html('<%= j render 'answers/answer', answer: @answer %>');
 $('#answer_body').val('');

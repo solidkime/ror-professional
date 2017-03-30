@@ -1,6 +1,6 @@
   # frozen_string_literal: true
 class AnswersController < ApplicationController
-  before_action :load_answer, only: [:show, :new, :destroy]
+  before_action :load_answer, only: [:show, :destroy]
   before_action :load_question, only: [:new, :create]
 
   def index
@@ -10,21 +10,21 @@ class AnswersController < ApplicationController
   def show; end
 
   def new
-    @answer = @question.answers.new
+    #@answer = @question.answers.new
   end
 
   def create
-    @answer = @question.answers.create(answer_params.merge(user: current_user))
-    # @answer = Answer.new(answer_params)
-    # @answer.question = @question
-    # @answer.user = current_user
-    # @answer.save
+    #@answer = @question.answers.create(answer_params.merge(user: current_user))
+    @answer = Answer.new(answer_params)
+    @answer.question = @question
+    @answer.user = current_user
+    @answer.save
 
-    # if @answer.save
-    #  redirect_to @question, notice: 'Thank you for answer!'
-    # else
-    #   render "questions/show"
-    # end
+    if @answer.save
+      flash[:notice] = 'Thank you for answer!'
+    else
+      flash[:notice] = 'Answer is wrong'
+    end
   end
 
   def destroy

@@ -32,7 +32,7 @@ class AnswersController < ApplicationController
       @answer.destroy
       redirect_to question_path(@question), notice: 'Answer was succesfully deleted!'
     else
-      render 'questions/show'
+      render :nothing => true, :status => 401
     end
   end
 

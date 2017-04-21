@@ -35,12 +35,17 @@ feature 'Question editing', %q{
     end
   end
 
-  scenario "Authenticated user tries to edit another user's question"
-  scenario 'Unauthenticated user tries to edit question'
-
-
-
-
-
-
+  scenario "Authenticated user tries to edit another user's question" do
+    sign_in(user_2)
+    visit question_path(question)
+    within '.question-container' do
+      expect(page).to_not have_link 'Edit'
+    end
+  end
+  scenario 'Unauthenticated user tries to edit question' do
+    visit question_path(question)
+    within '.question-container' do
+      expect(page).to_not have_link 'Edit'
+    end
+  end
 end

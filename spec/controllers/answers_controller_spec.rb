@@ -64,9 +64,9 @@ RSpec.describe AnswersController, type: :controller do
         expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(0)
       end
 
-      it 'renders show view' do
+      it 'returns 401' do
         delete :destroy, params: { id: answer }
-        expect(response).to render_template :show
+        expect(response.status).to eq 401
       end
     end
   end

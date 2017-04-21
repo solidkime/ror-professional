@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
-  let(:question) { create :question, user: user }
+  let!(:question) { create :question, user: user }
   let(:answer) { create :answer, question: question, user: user }
 
 
@@ -53,10 +53,10 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'if current_user is not an author of answer' do
-      before do
-        @user2 = create(:user)
-        @request.env['devise.mapping'] = Devise.mappings[:user]
-        sign_in @user2
+      let!(:user_2) do
+        user = create(:user)
+        sign_in user
+        user
       end
 
       it 'not deletes answer' do
@@ -67,7 +67,56 @@ RSpec.describe AnswersController, type: :controller do
       it 'renders show view' do
         delete :destroy, params: { id: answer }
         expect(response).to render_template :show
-        should set_flash.now[:alert].to('Sorry, you can delete only your answers.')
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+
+    context 'if current_user is an author of answer' do
+      let(:user) do
+        user = create(:user)
+        sign_in user
+        user
+      end
+
+      let(:answer) { create(:answer, user: user, question: question) }
+
+      it 'assigns the requested answer to @answer' do
+        patch :update, params: { id: answer, answer: attributes_for(:answer), format: :js }
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'changes answer attributes' do
+        patch :update, params: {id: answer, answer: {body: 'new body'}, format: :js }
+        answer.reload
+        expect(answer.body).to eq 'new body'
+      end
+
+      it 'render update template for updated question' do
+        patch :update, params: {id: answer, answer: attributes_for(:answer), format: :js }
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'if current_user is not an author of answer' do
+      # before do
+      #   @user2 = create(:user)
+      #   @request.env['devise.mapping'] = Devise.mappings[:user]
+      #   sign_in @user2
+      # end
+      let!(:user_2) do
+        user = create(:user)
+        sign_in user
+        user
+      end
+
+      let(:answer) { create(:answer, user: user, question: question) }
+
+      it "doesn't change answer" do
+        patch :update, params: { id: answer, answer: { body: 'new body'}, format: :js }
+        answer.reload
+        expect(answer.body).to_not eq 'new body'
       end
     end
   end

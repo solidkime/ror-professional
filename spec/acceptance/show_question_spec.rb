@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'acceptance_helper'
 
 feature "View the question and it's answers" do
   given(:user) { create(:user) }

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'acceptance_helper'
 
 feature 'User can destroy his or her answer', %q{
   In order to be released from shame of being so silly

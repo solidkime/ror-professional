@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'acceptance_helper'
 
 feature 'Create answer', %q{
   In order to help a person, who asked a question
@@ -6,8 +6,6 @@ feature 'Create answer', %q{
   I want to be able to answer a questions
 } do
 
-  before do
-  end
   given(:user) { create(:user) }  
   given(:question) { create(:question, user: user) }
 

@@ -1,10 +1,8 @@
-h2#question_title
-  = @question.title
-= @question.body
+.question-container id="question_container#{@question.id}" 
+  = render @question
 
 ul.answers
-  - @question.answers.each do |answer|
-    = render 'answers/answer', answer: answer
+  = render @question.answers
 
             
 - if user_signed_in?

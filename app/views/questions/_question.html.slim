@@ -1,0 +1,12 @@
+- if question.persisted?
+  div id= dom_id(question)
+    h2= question.title
+    li= question.body
+    - if user_signed_in? && current_user.author_of?(question) && !question.new_record?
+      p= link_to "Destroy question", question_path(question), method: :delete, data: { confirm: 'Are you sure?' }
+      p= link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id}
+      = form_for question, remote: true, html: {id: "edit-question-#{question.id}"} do |f|
+        = f.label :body, "Question"
+        = f.text_field :title
+        = f.text_area :body
+        = f.submit "Save"

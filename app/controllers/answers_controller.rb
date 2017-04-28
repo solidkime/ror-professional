@@ -30,7 +30,7 @@ class AnswersController < ApplicationController
     @question = @answer.question
     if current_user.author_of?(@answer)
       @answer.destroy
-      redirect_to question_path(@question), notice: 'Answer was succesfully deleted!'
+      # redirect_to question_path(@question), notice: 'Answer was succesfully deleted!'
     else
       render :nothing => true, :status => 401
     end

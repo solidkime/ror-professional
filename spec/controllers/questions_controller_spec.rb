@@ -139,7 +139,7 @@ RSpec.describe QuestionsController, type: :controller do
         sign_in user
         user
       end
-      
+
       let(:question) { create(:question, user: user) }
 
       it "doesn't change question" do
@@ -181,7 +181,6 @@ RSpec.describe QuestionsController, type: :controller do
       it 'returns 401' do
         delete :destroy, params: { id: question }
         expect(response.status).to eq 401
-        #should set_flash.now[:alert].to('Sorry, you can delete only your questions.')
       end
     end
   end

@@ -5,7 +5,10 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
-  def make_best
+  # default_scope { order(created_at: :asc) } # not my idea, but seems convinient
+  scope :best_first, -> { order('best DESC') }
+
+  def mark_best
     question.answers.where("best = ?", true).update_all(best: false)
     update!(best: true)
   end

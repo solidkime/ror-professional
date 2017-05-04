@@ -184,4 +184,47 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'PUT #mark_best_answer' do
+    let(:question) { create(:question, user: user) }
+    let(:answer_1) { create(:answer, user: user, question: question) }
+    
+    context 'user is an author of a question' do
+      let(:user) do
+        user = create(:user)
+        sign_in user
+        user
+      end
+
+      it 'assigns the requested question to @question' do
+        put :mark_best_answer, params: { id: question, answer_id: answer_1, format: :js }
+        question.reload
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'renders mark template' do
+          put :mark_best_answer, params: { id: question, answer_id: answer_1, format: :js }
+          expect(response).to render_template :mark_best_answer
+        end
+      end
+
+      context 'question with 3 answers' do
+
+        let(:answer_2) { create(:answer, user: user, question: question) }
+        let(:answer_3) { create(:answer, user: user, question: question, best: true) }
+
+        it 'changes answer best to true and all other answers to false' do # вомзожно стлоит разделить
+          answer_2
+          answer_3
+          put :mark_best_answer, params: { id: question, answer_id: answer_1, format: :js }
+          question.reload
+          answer_1.reload
+          expect(answer_1.best).to eq true
+          expect(question.best_answer).to eq answer_1
+          answer_3.reload
+          expect(answer_3.best).to eq false
+        end
+    end
+    context 'user is not an author of a question '
+  end
 end

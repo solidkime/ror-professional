@@ -1,7 +1,7 @@
   # frozen_string_literal: true
 class AnswersController < ApplicationController
   before_action :load_answer, only: [:show, :destroy, :update]
-  before_action :load_question, only: [:new, :create]
+  before_action :load_question, only: [:new, :create, :mark_best]
 
   def index
     @answers = Answer.all
@@ -39,6 +39,16 @@ class AnswersController < ApplicationController
   def update
     if current_user.author_of?(@answer)
       @answer.update(answer_params)
+    end
+  end
+
+  def mark_best
+    if current_user.author_of?(@question)
+      @answer = Answer.find(params[:id])
+      @answer.mark_best
+      redirect_to question_path(@question)
+    else
+      render :nothing => true, :status => 401
     end
   end
 

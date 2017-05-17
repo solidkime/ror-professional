@@ -40,12 +40,7 @@ class QuestionsController < ApplicationController
   end
 end
 
-def mark_best_answer
-  if current_user.author_of?(@question)
-    @answer = Answer.find(params[:answer_id])
-    @answer.mark_best
-  end
-end
+
 
   private
 

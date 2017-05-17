@@ -80,11 +80,16 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'with invalid attributes' do
+      let(:question) { build(:question, :invalid) }
+      subject { post :create, params: { question: question.attributes } }
+
       it 'does not save the question' do
-        expect { post :create, params: { question: attributes_for(:invalid_question) } }.to_not change(Question, :count)
+        expect { subject }.to_not change(Question, :count)
       end
+
       it 're-renders new view' do
-        post :create, params: { question: attributes_for(:invalid_question) }
+        #post :create, params: { question: attributes_for(:question, :invalid) }
+        subject
         expect(response).to render_template :new
       end
     end
@@ -185,46 +190,69 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'PUT #mark_best_answer' do
-    let(:question) { create(:question, user: user) }
-    let(:answer_1) { create(:answer, user: user, question: question) }
+  # describe 'PUT #mark_best_answer' do
+  #   let(:question) { create(:question, user: user) }
+  #   let(:answer) { create(:answer, user: user, question: question) }
+  #   let(:user) { create(:user) }
     
-    context 'user is an author of a question' do
-      let(:user) do
-        user = create(:user)
-        sign_in user
-        user
-      end
+  #   context 'user is an author of a question' do
+  #     before do
+  #       sign_in user
+  #     end
+  #     it 'assigns the requested question to @question' do
+        
+  #       put :mark_best_answer, params: { id: question, answer_id: answer, format: :js }
+  #       question.reload
+  #       expect(assigns(:question)).to eq question
+  #     end
 
-      it 'assigns the requested question to @question' do
-        put :mark_best_answer, params: { id: question, answer_id: answer_1, format: :js }
-        question.reload
-        expect(assigns(:question)).to eq question
-      end
+  #     it 'renders mark template' do
+  #         sign_in user
+  #         put :mark_best_answer, params: { id: question, answer_id: answer, format: :js }
+  #         expect(response).to render_template :mark_best_answer
+  #       end
+  #     end
 
-      it 'renders mark template' do
-          put :mark_best_answer, params: { id: question, answer_id: answer_1, format: :js }
-          expect(response).to render_template :mark_best_answer
-        end
-      end
+  #     context 'question with 3 answers' do
+  #       before do
+  #         sign_in user
+  #       end
+  #       let(:question) { create :question, :with_answers, user: user }
+  #       let!(:old_best_answer) { create(:answer, :best, user: user, question: question)}
+  #       let(:testing_answer) {question.answers.first}
+        
 
-      context 'question with 3 answers' do
+  #       it 'changes answer best to true and all other answers to false' do # вомзожно стлоит разделить
+  #         put :mark_best_answer, params: { id: question, answer_id: testing_answer, format: :js }
+  #         question.reload
+  #         testing_answer.reload
+  #         old_best_answer.reload
+  #         expect(testing_answer.best).to eq true
+  #         expect(question.best_answer).to eq testing_answer
+  #         expect(old_best_answer.best).to eq false
+  #       end
+  #   end
+  #   context 'user is not an author of a question' do
+  #     let(:user_2) { create(:user) }
+  #     let(:question) { create :question, :with_answers, user: user }
+  #     let!(:old_best_answer) { create(:answer, :best, user: user, question: question)}
+  #     let(:testing_answer) {question.answers.first}
 
-        let(:answer_2) { create(:answer, user: user, question: question) }
-        let(:answer_3) { create(:answer, user: user, question: question, best: true) }
+  #     it "doesn't change answer best to true and all other answers to false" do
+  #       sign_in user_2
+  #       put :mark_best_answer, params: { id: question, answer_id: testing_answer, format: :js }
+  #       question.reload
+  #       testing_answer.reload
+  #       old_best_answer.reload
+  #       expect(testing_answer.best).to eq false
+  #       expect(question.best_answer).to eq old_best_answer
+  #       expect(old_best_answer.best).to eq true
+  #     end
 
-        it 'changes answer best to true and all other answers to false' do # вомзожно стлоит разделить
-          answer_2
-          answer_3
-          put :mark_best_answer, params: { id: question, answer_id: answer_1, format: :js }
-          question.reload
-          answer_1.reload
-          expect(answer_1.best).to eq true
-          expect(question.best_answer).to eq answer_1
-          answer_3.reload
-          expect(answer_3.best).to eq false
-        end
-    end
-    context 'user is not an author of a question '
-  end
+  #     it 'returns 401' do
+  #       put :mark_best_answer, params: { id: question, answer_id: testing_answer, format: :js }
+  #       expect(response.status).to eq 401
+  #     end
+  #   end 
+  # end
 end

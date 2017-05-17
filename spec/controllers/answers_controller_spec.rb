@@ -43,12 +43,12 @@ RSpec.describe AnswersController, type: :controller do
       sign_in_user
       it 'deletes answer' do
         answer = create(:answer, user: @user, question: question)
-        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(-1)
       end
       it 'redirects to index view' do
         answer = create(:answer, user: @user, question: question)
-        delete :destroy, params: {id: answer}
-        expect(response).to redirect_to question_path(question)
+        delete :destroy, params: {id: answer}, format: :js
+        expect(response).to render_template :destroy
       end
     end
 
@@ -61,11 +61,11 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'not deletes answer' do
         answer
-        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(0)
+        expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(0)
       end
 
       it 'returns 401' do
-        delete :destroy, params: { id: answer }
+        delete :destroy, params: { id: answer }, format: :js
         expect(response.status).to eq 401
       end
     end
@@ -119,5 +119,74 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to_not eq 'new body'
       end
     end
+  end
+  
+  describe 'PUT #mark_best_answer' do
+    let(:question) { create(:question, user: user) }
+    let(:answer) { create(:answer, user: user, question: question) }
+    let(:user) { create(:user) }
+    
+    context 'user is an author of a question' do
+      before do
+        sign_in user
+      end
+      it 'assigns the requested question to @question' do
+        
+        put :mark_best, params: { id: answer, question_id: question, format: :js }
+        question.reload
+        expect(assigns(:question)).to eq question
+        expect(assigns(:answer)).to eq answer
+        #!!!!!!! answer toje prover
+      end
+
+      it 'renders mark template' do
+          sign_in user
+          put :mark_best, params: { id: answer, question_id: question, format: :js }
+          expect(response).to render_template :mark_best
+        end
+      end
+
+      context 'question with 3 answers' do
+        before do
+          sign_in user
+        end
+        let(:question) { create :question, :with_answers, user: user }
+        let!(:old_best_answer) { create(:answer, :best, user: user, question: question)}
+        let(:testing_answer) {question.answers.first}
+        
+
+        it 'changes answer best to true and all other answers to false' do # вомзожно стлоит разделить
+          put :mark_best, params: { id: testing_answer, question_id: testing_answer.question, format: :js }
+          question.reload
+          testing_answer.reload
+          old_best_answer.reload
+          expect(testing_answer.best).to eq true
+          expect(question.best_answer).to eq testing_answer
+          expect(old_best_answer.best).to eq false
+        end
+    end
+    context 'user is not an author of a question' do
+      let(:user_2) { create(:user) }
+      let(:question) { create :question, :with_answers, user: user }
+      let!(:old_best_answer) { create(:answer, :best, user: user, question: question)}
+      let(:testing_answer) {question.answers.first}
+
+      it "doesn't change answer best to true and all other answers to false" do
+        sign_in user_2
+        put :mark_best, params: { id: testing_answer, question_id: testing_answer.question, format: :js }
+        question.reload
+        testing_answer.reload
+        old_best_answer.reload
+        expect(testing_answer.best).to eq false
+        expect(question.best_answer).to eq old_best_answer
+        expect(old_best_answer.best).to eq true
+      end
+
+      it 'returns 401' do
+        sign_in user_2
+        put :mark_best, params: { id: testing_answer, question_id: testing_answer.question, format: :js }
+        expect(response.status).to eq 401
+      end
+    end 
   end
 end

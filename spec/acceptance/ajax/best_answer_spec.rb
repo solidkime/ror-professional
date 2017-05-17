@@ -9,21 +9,51 @@ feature 'Mark best answer', %q{
   given!(:user) { create(:user) }  
   given!(:question) { create(:question, user: user) }
   given!(:answer_1) { create :answer, question: question, user: user }
-  given!(:answer_2) { create :answer, question: question, user: user, best: true }
-  given!(:answer_3) { create :answer, question: question, user: user }
+  given!(:answer_2) { create :answer, question: question, user: user}
+  given(:old_best_answer) { create(:answer, :best, question: question,  user: user) }
 
-  scenario 'author marks answer as best', js: true do
-    sign_in(user)
+  scenario 'user sees best answer', js: true do
+    old_best_answer
     visit question_path(question)
 
     within '.answers' do
-      first(:link, 'Mark as best').click 
-      expect(page).to have_content `=== Best answer ===`
+      expect(page).to have_content '=== Best answer ==='
     end
   end
 
+  scenario 'best answer appears on the top', js: true do
+    old_best_answer
+    sign_in(user)
+    visit question_path(question)
+    expect(page.find('.container_answer:first-child')).to have_content '=== Best answer ==='
+  end
 
+  scenario 'user marks answer as best and becomes marked and appears on top', js: true do
+    sign_in(user)
+    visit question_path(question)
+    expect(page).not_to have_content '=== Best answer ==='
+    
+    within '.answers' do
+      first(:button, 'Mark as best').click
 
+      expect(page).to have_content '=== Best answer ==='
 
+    end
+    expect(page.find('.container_answer:first-child')).to have_content '=== Best answer ==='
+  end
 
+  scenario 'user marks another answer as best and it replaces previous one', js: true do
+    old_best_answer
+    sign_in(user)
+    visit question_path(question)
+
+    within "#answer_#{answer_2.id}" do
+      click_on 'Mark as best'
+    end
+  end
 end
+
+# нет бест ансера
+    # бестансер появился у ансер_айди в дивчике
+    # бестансер выше всех ?
+    #first(:link, 'Mark as best').click 

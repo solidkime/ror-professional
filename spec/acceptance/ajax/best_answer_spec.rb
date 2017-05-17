@@ -47,13 +47,16 @@ feature 'Mark best answer', %q{
     sign_in(user)
     visit question_path(question)
 
+    within "#answer_#{old_best_answer.id}" do
+      expect(page).to have_content '=== Best answer ==='
+    end
+
     within "#answer_#{answer_2.id}" do
       click_on 'Mark as best'
+      expect(page).to have_content '=== Best answer ==='
+    end
+    within "#answer_#{old_best_answer.id}" do
+      expect(page).not_to have_content '=== Best answer ==='
     end
   end
 end
-
-# нет бест ансера
-    # бестансер появился у ансер_айди в дивчике
-    # бестансер выше всех ?
-    #first(:link, 'Mark as best').click 

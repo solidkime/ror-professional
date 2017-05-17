@@ -46,7 +46,6 @@ class AnswersController < ApplicationController
     if current_user.author_of?(@question)
       @answer = Answer.find(params[:id])
       @answer.mark_best
-      redirect_to question_path(@question)
     else
       render :nothing => true, :status => 401
     end

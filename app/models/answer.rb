@@ -21,18 +21,12 @@ class Answer < ApplicationRecord
   #   end
   # end
 
-
-  # def mark_best
-  #   ActiveRecord::Base.transaction do
-  #     question.answers.update(best: false)
-  #     self.update(best: true)
-  #   end
-  # end
-  def mark_best
+def mark_best
     transaction do
-      question.answers.update(best: false)
+      question.answers.where.not(id: self.id).update_all(best: false)
       self.update!(best: true)
     end
   end
+
 
 end

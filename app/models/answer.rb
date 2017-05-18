@@ -9,24 +9,26 @@ class Answer < ApplicationRecord
   # default_scope { order('best DESC') }
   scope :best_first, -> { order('best DESC') }
 
+
+# def mark_best
+#   transaction do
+#     question.answers.where.not(id: self.id).update_all(best: false)
+#     self.update!(best: true)
+#   end
+# end
+
   # def mark_best
-  #   ActiveRecord::Base.transaction do
-  #     question.answers.where("best = ?", true).update_all(best: false)
-  #     #self.update(best: true)
-  #     question.answers.where(id: self.id).update_all(best: true)
-  #     self.best = true
-  #     # Answer.where(question_id: question.id, best: true).update(best: false)
-  #     #Answer.where(question: question).update_all(best: false)
-  #     #question.answers.where.not(id: self.id).update_all(best: false)
+  #   transaction do
+  #     question.answers.where(best: true).update_all(best: false) if !best?
+  #     update!(best: true)
   #   end
   # end
 
-def mark_best
+  def mark_best
     transaction do
-      question.answers.where.not(id: self.id).update_all(best: false)
-      self.update!(best: true)
+      toggle(:best)
+      question.answers.where(best: true).update_all(best: false) if best?
+      save!
     end
   end
-
-
 end

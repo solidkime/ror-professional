@@ -13,6 +13,7 @@ RSpec.describe QuestionsController, type: :controller do
     it 'populates an array of all question' do
       expect(assigns(:questions)).to match_array(questions)
     end
+    
     it 'renders index view' do
       expect(response).to render_template :index
     end
@@ -183,9 +184,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(0)
       end
 
-      it 'returns 401' do
+      it 'returns 403' do
         delete :destroy, params: { id: question }
-        expect(response.status).to eq 401
+        expect(response.status).to eq 403
       end
     end
   end

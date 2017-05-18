@@ -10,6 +10,7 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     sign_in_user
 
+
     context 'with valid attributes' do
       it 'saves the new answer in database' do
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question, user: user, format: :js } }.to change(question.answers, :count).by(1)
@@ -64,9 +65,9 @@ RSpec.describe AnswersController, type: :controller do
         expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(0)
       end
 
-      it 'returns 401' do
+      it 'returns 403' do
         delete :destroy, params: { id: answer }, format: :js
-        expect(response.status).to eq 401
+        expect(response.status).to eq 403
       end
     end
   end
@@ -117,6 +118,7 @@ RSpec.describe AnswersController, type: :controller do
         patch :update, params: { id: answer, answer: { body: 'new body'}, format: :js }
         answer.reload
         expect(answer.body).to_not eq 'new body'
+        expect(response.status).to eq 403
       end
     end
   end
@@ -182,10 +184,10 @@ RSpec.describe AnswersController, type: :controller do
         expect(old_best_answer.best).to eq true
       end
 
-      it 'returns 401' do
+      it 'returns 403' do
         sign_in user_2
         put :mark_best, params: { id: testing_answer, question_id: testing_answer.question, format: :js }
-        expect(response.status).to eq 401
+        expect(response.status).to eq 403
       end
     end 
   end

@@ -14,9 +14,10 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = Answer.new(answer_params)
-    @answer.question = @question
-    @answer.user = current_user
+    @answer = @question.answers.new(answer_params.merge(question: @question, user: current_user))
+    # @answer = Answer.new(answer_params)
+    # @answer.question = @question
+    # @answer.user = current_user
     @answer.save
 
     if @answer.save
@@ -32,13 +33,15 @@ class AnswersController < ApplicationController
       @answer.destroy
       # redirect_to question_path(@question), notice: 'Answer was succesfully deleted!'
     else
-      render :nothing => true, :status => 401
+      head :forbidden
     end
   end
 
   def update
     if current_user.author_of?(@answer)
       @answer.update(answer_params)
+    else
+      head :forbidden
     end
   end
 
@@ -47,7 +50,7 @@ class AnswersController < ApplicationController
       @answer = Answer.find(params[:id])
       @answer.mark_best
     else
-      render :nothing => true, :status => 401
+      head :forbidden
     end
   end
 

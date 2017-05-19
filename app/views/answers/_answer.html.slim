@@ -1,11 +1,11 @@
 - if answer.persisted?
   
   div id= dom_id(answer) class='container_answer'
-    -if answer.best
+    -if answer.best?
       .best-answer
         = '=== Best answer ==='
     li= answer.body
-    - if user_signed_in? && current_user.author_of?(answer) && !answer.new_record?
+    - if user_signed_in? && current_user.author_of?(answer)
       p= link_to "Destroy answer", answer_path(answer), remote: true, method: :delete, data: { confirm: 'Are you sure?' }
       p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id}
 

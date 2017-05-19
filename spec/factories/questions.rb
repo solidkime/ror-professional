@@ -22,13 +22,5 @@ FactoryGirl.define do
       title nil
       body nil
     end
-
-    # factory :question_with_answers, traits: [:with_answers]
   end
-
-  # factory :invalid_question, class: "Question" do
-  #   title nil
-  #   body nil
-  # end
-
 end

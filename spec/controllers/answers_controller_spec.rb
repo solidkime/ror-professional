@@ -101,11 +101,6 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'if current_user is not an author of answer' do
-      # before do
-      #   @user2 = create(:user)
-      #   @request.env['devise.mapping'] = Devise.mappings[:user]
-      #   sign_in @user2
-      # end
       let!(:user_2) do
         user = create(:user)
         sign_in user
@@ -124,69 +119,76 @@ RSpec.describe AnswersController, type: :controller do
   end
   
   describe 'PUT #mark_best_answer' do
-    let(:question) { create(:question, user: user) }
-    let(:answer) { create(:answer, user: user, question: question) }
     let(:user) { create(:user) }
+    #let(:question) { create(:question, user: user) }
+    let(:question) { create :question, :with_answers, user: user }
+    #let(:answer) { create(:answer, user: user, question: question) }
+    let!(:old_best_answer) { create(:answer, :best, user: user, question: question)}
+    let(:testing_answer) {question.answers.first}
+    
     
     context 'user is an author of a question' do
-      before do
-        sign_in user
+      before {sign_in user}
+
+      subject do
+        put :mark_best, params: { id: testing_answer, question_id: testing_answer.question, format: :js }
+        question.reload
+        testing_answer.reload
+        old_best_answer.reload
       end
-      it 'assigns the requested question to @question' do
         
-        put :mark_best, params: { id: answer, question_id: question, format: :js }
+      it 'assigns the requested question to @question' do
+        put :mark_best, params: { id: testing_answer, question_id: question, format: :js }
         question.reload
         expect(assigns(:question)).to eq question
-        expect(assigns(:answer)).to eq answer
-        #!!!!!!! answer toje prover
+        expect(assigns(:answer)).to eq testing_answer
       end
 
       it 'renders mark template' do
-          sign_in user
-          put :mark_best, params: { id: answer, question_id: question, format: :js }
-          expect(response).to render_template :mark_best
-        end
+        sign_in user
+        put :mark_best, params: { id: testing_answer, question_id: question, format: :js }
+        expect(response).to render_template :mark_best
       end
 
-      context 'question with 3 answers' do
-        before do
-          sign_in user
-        end
-        let(:question) { create :question, :with_answers, user: user }
-        let!(:old_best_answer) { create(:answer, :best, user: user, question: question)}
-        let(:testing_answer) {question.answers.first}
-        
-
-        it 'changes answer best to true and all other answers to false' do # вомзожно стлоит разделить
-          put :mark_best, params: { id: testing_answer, question_id: testing_answer.question, format: :js }
-          question.reload
-          testing_answer.reload
-          old_best_answer.reload
+      it 'changes answer best to true and all other answers to false' do
+          subject
           expect(testing_answer.best).to eq true
-          expect(question.best_answer).to eq testing_answer
-          expect(old_best_answer.best).to eq false
         end
+
+      it 'changes old best answer to false' do
+        subject
+        # я бы все же сделал 2 экспекта или как-то красиво проверил массив, но не знаю как
+        expect(old_best_answer.best).to eq false
+        expect(question.answers[1].best).to eq false
+      end
+
     end
+
     context 'user is not an author of a question' do
       let(:user_2) { create(:user) }
       let(:question) { create :question, :with_answers, user: user }
       let!(:old_best_answer) { create(:answer, :best, user: user, question: question)}
       let(:testing_answer) {question.answers.first}
 
-      it "doesn't change answer best to true and all other answers to false" do
+      subject do
         sign_in user_2
         put :mark_best, params: { id: testing_answer, question_id: testing_answer.question, format: :js }
-        question.reload
         testing_answer.reload
         old_best_answer.reload
+      end
+
+      it "testing answer don't become best" do
+        subject
         expect(testing_answer.best).to eq false
-        expect(question.best_answer).to eq old_best_answer
+      end
+
+      it "old best answer is still the best" do
+        subject
         expect(old_best_answer.best).to eq true
       end
 
       it 'returns 403' do
-        sign_in user_2
-        put :mark_best, params: { id: testing_answer, question_id: testing_answer.question, format: :js }
+        subject
         expect(response.status).to eq 403
       end
     end 

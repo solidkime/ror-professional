@@ -155,6 +155,11 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.title).to_not eq 'new_title'
         expect(question.body).to_not eq 'new body'
       end
+
+      it 'returns 403' do
+        patch :update, params: { id: question, question: {title: 'new_title', body: 'new body'}, format: :js }
+        expect(response.status).to eq 403
+      end
     end
   end
   

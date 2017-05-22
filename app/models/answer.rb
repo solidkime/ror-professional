@@ -4,9 +4,7 @@ class Answer < ApplicationRecord
   belongs_to :user
 
   validates :body, presence: true
-
-  # default_scope { order(created_at: :asc) } # not my idea, but seems convinient
-  # default_scope { order('best DESC') }
+  
   scope :best_first, -> { order('best DESC') }
 
   def mark_best

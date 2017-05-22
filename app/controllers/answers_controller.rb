@@ -15,10 +15,6 @@ class AnswersController < ApplicationController
 
   def create
     @answer = @question.answers.new(answer_params.merge(question: @question, user: current_user))
-    # @answer = Answer.new(answer_params)
-    # @answer.question = @question
-    # @answer.user = current_user
-    @answer.save
 
     if @answer.save
       flash[:notice] = 'Thank you for answer!'
@@ -31,7 +27,6 @@ class AnswersController < ApplicationController
     @question = @answer.question
     if current_user.author_of?(@answer)
       @answer.destroy
-      # redirect_to question_path(@question), notice: 'Answer was succesfully deleted!'
     else
       head :forbidden
     end

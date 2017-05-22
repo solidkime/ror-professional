@@ -29,6 +29,8 @@ class QuestionsController < ApplicationController
   def update
     if current_user.author_of?(@question)
       @question.update(question_params)
+    else
+      head :forbidden
     end
   end
 

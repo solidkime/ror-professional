@@ -120,9 +120,7 @@ RSpec.describe AnswersController, type: :controller do
   
   describe 'PUT #mark_best_answer' do
     let(:user) { create(:user) }
-    #let(:question) { create(:question, user: user) }
     let(:question) { create :question, :with_answers, user: user }
-    #let(:answer) { create(:answer, user: user, question: question) }
     let!(:old_best_answer) { create(:answer, :best, user: user, question: question)}
     let(:testing_answer) {question.answers.first}
     

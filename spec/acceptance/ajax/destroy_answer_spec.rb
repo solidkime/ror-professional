@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'acceptance_helper'
 
 feature 'User can destroy his or her answer', %q{
   In order to be released from shame of being so silly
@@ -11,7 +11,7 @@ feature 'User can destroy his or her answer', %q{
   given!(:answer) {create(:answer, user: user, question: question)}
   given(:user_2) { create(:user) }
 
-  scenario 'Registered user deletes his own answer' do
+  scenario 'Registered user deletes his own answer', js: true do
     sign_in(user)
 
     visit question_path(question)

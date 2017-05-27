@@ -1,7 +1,7 @@
   # frozen_string_literal: true
 class AnswersController < ApplicationController
-  before_action :load_answer, only: [:show, :destroy]
-  before_action :load_question, only: [:new, :create]
+  before_action :load_answer, only: [:show, :destroy, :update]
+  before_action :load_question, only: [:new, :create, :mark_best]
 
   def index
     @answers = Answer.all
@@ -14,11 +14,7 @@ class AnswersController < ApplicationController
   end
 
   def create
-    #@answer = @question.answers.create(answer_params.merge(user: current_user))
-    @answer = Answer.new(answer_params)
-    @answer.question = @question
-    @answer.user = current_user
-    @answer.save
+    @answer = @question.answers.new(answer_params.merge(question: @question, user: current_user))
 
     if @answer.save
       flash[:notice] = 'Thank you for answer!'
@@ -31,10 +27,25 @@ class AnswersController < ApplicationController
     @question = @answer.question
     if current_user.author_of?(@answer)
       @answer.destroy
-      redirect_to question_path(@question), notice: 'Answer was succesfully deleted!'
     else
-      flash.now[:alert] = 'Sorry, you can delete only your answers.'
-      render 'questions/show'
+      head :forbidden
+    end
+  end
+
+  def update
+    if current_user.author_of?(@answer)
+      @answer.update(answer_params)
+    else
+      head :forbidden
+    end
+  end
+
+  def mark_best
+    if current_user.author_of?(@question)
+      @answer = Answer.find(params[:id])
+      @answer.mark_best
+    else
+      head :forbidden
     end
   end
 

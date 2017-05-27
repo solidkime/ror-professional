@@ -1,0 +1,6 @@
+$(".notice").html('<%= j flash[:notice] %>');
+<% if @question.errors.present? %>
+  $('.errors').html('<%= j render 'common/errors', resource: @question %>');
+<% else %>
+  $("#question_container<%= @question.id %>").html('<%= j render @question %>');
+<% end %>

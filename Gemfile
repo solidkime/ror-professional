@@ -34,8 +34,9 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 gem 'slim-rails'
-gem 'devise'
+gem 'devise', git: 'https://github.com/gogovan/devise.git', branch: 'rails-5.1'
 gem 'jquery-rails'
+gem 'carrierwave'
 
 
 
@@ -44,7 +45,6 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara'#, '~> 2.7.0'
-  gem 'selenium-webdriver'
   gem 'database_cleaner'
 
   # гемы из скринкаста

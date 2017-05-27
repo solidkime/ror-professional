@@ -2,6 +2,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [ :index, :show ]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
+  
   def index
     @questions = Question.all
   end
@@ -26,10 +27,10 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to @question
+    if current_user.author_of?(@question)
+      @question.update(question_params)
     else
-      render :edit
+      head :forbidden
     end
   end
 
@@ -38,10 +39,11 @@ class QuestionsController < ApplicationController
       @question.destroy
       redirect_to questions_path, notice: 'Question was succesfully deleted!'
     else
-      flash.now[:alert] = 'Sorry, you can delete only your questions.'
-      render :show
+      head :forbidden
   end
 end
+
+
 
   private
 

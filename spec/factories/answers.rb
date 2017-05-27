@@ -8,6 +8,10 @@ FactoryGirl.define do
     body
     question
     user
+      
+    trait :best do
+      best :true
+    end
   end
 
   factory :invalid_answer, class: "Answer" do

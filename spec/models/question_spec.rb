@@ -6,6 +6,8 @@ RSpec.describe Question, type: :model do
   
   it { should validate_presence_of :title }
   it { should validate_presence_of :body }
+  it { should accept_nested_attributes_for :attachments}
+  it { should have_many :attachments }
 
   describe 'best answer returns answer with best attribute set to true' do
     let(:user) { create(:user) }

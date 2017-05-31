@@ -9,6 +9,8 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true
 
+  accepts_nested_attributes_for :attachments
+
 
   def best_answer
     answers.find_by(best: true)

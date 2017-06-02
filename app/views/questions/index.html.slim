@@ -12,13 +12,6 @@ table.questions
         td=  question.title
         td=  question.body
         td= link_to "show", question_path(question)
-        td= link_to 'Edit', '', class: 'edit-question-link', data: { question_id: question.id }
-        td
-          = form_for question, remote: true, html: {id: "edit-answer-#{question.id}"} do |f|
-            = f.label :body, "Question"
-            = f.text_field :title
-            = f.text_area :body
-            = f.submit "Save"
 
 
 

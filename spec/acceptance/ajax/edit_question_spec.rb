@@ -24,7 +24,7 @@ feature 'Question editing', %q{
     scenario 'Author tries to edit his question', js: true do
       click_on 'Edit'
       within '.edit_question' do
-        fill_in 'Question', with: 'edited question'
+        fill_in id: 'question_body', with: 'edited question'
         click_on 'Save'
       end
       within '.question-container' do

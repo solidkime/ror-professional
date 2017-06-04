@@ -21,3 +21,6 @@
 config/database.yml
 
 .idea
+
+# Ignore uploaded files
+/public/uploads

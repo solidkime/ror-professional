@@ -5,6 +5,9 @@
       .best-answer
         = '=== Best answer ==='
     li= answer.body
+    ul
+      - answer.attachments.each do |a|
+        li= link_to a.file.identifier, a.file.url
     - if user_signed_in? && current_user.author_of?(answer)
       p= link_to "Destroy answer", answer_path(answer), remote: true, method: :delete, data: { confirm: 'Are you sure?' }
       p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id}
@@ -12,6 +15,9 @@
       = form_for answer, remote: true, html: {id: "edit-answer-#{answer.id}"} do |f|
         = f.label :body, "Answer"
         = f.text_area :body
+        = f.fields_for :attachments do |a|
+          = a.label :file
+          = a.file_field :file
         = f.submit "Save"
     - if user_signed_in? && current_user.author_of?(answer.question)
       p= button_to "Mark as best", mark_best_answer_path(answer, question_id: answer.question), remote: true, method: :put

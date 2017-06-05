@@ -8,8 +8,9 @@
     = f.text_area :body
   p Attachments:
   p 
-    = f.fields_for :attachments do |a|
-      = a.label :file
-      = a.file_field :file  
+    = f.fields_for :attachments do |attachment|
+      = render 'common/attachment_fields', f: attachment
+    .links
+      = link_to_add_association 'add attachment', f, :attachments, partial: 'common/attachment_fields' 
   p
     = f.submit 'Create'

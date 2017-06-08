@@ -6,11 +6,8 @@
         = '=== Best answer ==='
     li= answer.body
     - if answer.attachments.present?
-      - answer.attachments.each do |a|
-        div id= dom_id(a) class='container_attachment'
-          li= link_to a.file.identifier, a.file.url
-          - if user_signed_in? && current_user.author_of?(answer)
-            li= link_to "Destroy attachment", attachment_path(a), method: :delete, remote: true
+      = render 'common/attachments', resource: answer
+      
     - if user_signed_in? && current_user.author_of?(answer)
       p= link_to "Destroy answer", answer_path(answer), remote: true, method: :delete, data: { confirm: 'Are you sure?' }
       p= link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id}

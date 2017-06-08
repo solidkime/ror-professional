@@ -32,7 +32,7 @@ feature 'Add files to answer', %q{
         el.set "#{Rails.root}/spec/spec_helper.rb"
       end
     end
-    click_on 'Create Answer'
+    click_on 'Create answer'
     within '.answers' do
       expect(page).to have_link 'spec_helper', count: 2
     end

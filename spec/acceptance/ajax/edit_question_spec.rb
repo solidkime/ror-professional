@@ -25,7 +25,7 @@ feature 'Question editing', %q{
       click_on 'Edit'
       within '.edit_question' do
         fill_in id: 'question_body', with: 'edited question'
-        click_on 'Save'
+        click_on 'Update Question'
       end
       within '.question-container' do
         expect(page).to_not have_content question.body

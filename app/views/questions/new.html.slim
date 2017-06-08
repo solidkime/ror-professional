@@ -1,16 +1,3 @@
-= form_for @question do |f|
-  = render 'common/errors', resource: @question if @question
-  p
-    = f.label :title
-    = f.text_field :title
-  p
-    = f.label :body
-    = f.text_area :body
-  p Attachments:
-  p 
-    = f.fields_for :attachments do |attachment|
-      = render 'common/attachment_fields', f: attachment
-    .links
-      = link_to_add_association 'add attachment', f, :attachments, partial: 'common/attachment_fields' 
-  p
-    = f.submit 'Create'
+h1 New Question
+
+= render 'form', question: @question

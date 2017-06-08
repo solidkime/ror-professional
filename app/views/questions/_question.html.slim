@@ -3,10 +3,13 @@
     h2= question.title
     li= question.body
     p Attachments:
-    ul
-      - question.attachments.each do |a|
-        / li= a.file.file.filename
-        li= link_to a.file.identifier, a.file.url
+    - if question.attachments.present?
+      ul
+        - question.attachments.each do |a|
+          div id= dom_id(a) class='container_attachment'
+            li= link_to a.file.identifier, a.file.url
+            - if user_signed_in? && current_user.author_of?(question)
+              li= link_to "Destroy attachment", attachment_path(a), method: :delete, remote: true
 
     - if user_signed_in? && current_user.author_of?(question) && !question.new_record?
       p= link_to "Destroy question", question_path(question), method: :delete, data: { confirm: 'Are you sure?' }

@@ -46,7 +46,7 @@ RSpec.describe AnswersController, type: :controller do
         answer = create(:answer, user: @user, question: question)
         expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(-1)
       end
-      it 'redirects to index view' do
+      it 'renders destroy js' do
         answer = create(:answer, user: @user, question: question)
         delete :destroy, params: {id: answer}, format: :js
         expect(response).to render_template :destroy

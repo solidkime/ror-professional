@@ -179,7 +179,7 @@ RSpec.describe QuestionsController, type: :controller do
         expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
       end
 
-      it 'redirects to index view' do
+      it 'redirects to questions_path' do
         question = create(:question, user: @user)
         delete :destroy, params: {id: question}
         expect(response).to redirect_to questions_path

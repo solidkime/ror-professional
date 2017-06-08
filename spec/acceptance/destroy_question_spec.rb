@@ -22,9 +22,10 @@ feature 'User can destroy his or her question', %q{
 
   scenario 'User tries to delete not his question' do
     sign_in(user_2)
-
-    expect(page).to have_content question.body
+    
     visit question_path(question)
+    expect(page).to have_content question.body
+    
     
     expect(page).to_not have_link 'Destroy'
   end

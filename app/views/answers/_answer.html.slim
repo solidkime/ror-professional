@@ -20,4 +20,4 @@
           = a.file_field :file
         = f.submit "Save"
     - if user_signed_in? && current_user.author_of?(answer.question)
-      p= button_to "Mark as best", mark_best_answer_path(answer, question_id: answer.question), remote: true, method: :put
+      p= button_to "Mark as best", mark_best_answer_path(answer, question_id: answer.question), class: 'mark-best-button', remote: true, method: :put

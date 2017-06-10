@@ -14,8 +14,13 @@ ul.answers
       br
       br
       = f.text_area :body
-    .actions
-      = f.submit
+      p 
+        = f.fields_for :attachments do |attachment|
+          = render 'common/attachment_fields', f: attachment
+        .links
+          = link_to_add_association 'add attachment', f, :attachments, partial: 'common/attachment_fields' 
+      p 
+        = f.submit "Create answer"
   -if current_user.author_of?(@question)
     p= link_to "Destroy", question_path(@question), method: :delete
 - else

@@ -1,0 +1,6 @@
+
+  - resource.attachments.each do |a|
+    div id= dom_id(a) class='container_attachment'
+      li= link_to a.file.identifier, a.file.url
+      - if a.attachable.user == current_user
+          li= link_to "Destroy attachment", attachment_path(a), method: :delete, remote: true
